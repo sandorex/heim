@@ -18,13 +18,13 @@ azure-devops = { project = "heim-rs", pipeline = "heim" }
 heim-common = { version = "0.0.5", path = "../heim-common" }
 heim-derive = { version = "0.0.5", path = "../heim-derive" }
 heim-runtime = { version = "0.0.2", path = "../heim-runtime" }
-heim-cpu = {version = "0.0.5", path = "../heim-cpu", optional = true }
-heim-disk = {version = "0.0.5", path = "../heim-disk", optional = true }
-heim-host = { version = "0.0.5", path = "../heim-host", optional = true }
-heim-memory = {version = "0.0.5", path = "../heim-memory", optional = true }
-heim-net = {version = "0.0.5", path = "../heim-net", optional = true }
-heim-process = { version = "0.0.5", path = "../heim-process", optional = true }
-heim-virt = { version = "0.0.5", path = "../heim-virt", optional = true }
+heim-cpu = {version = "0.0.5", path = "../heim-cpu", optional = true, default-features = false }
+heim-disk = {version = "0.0.5", path = "../heim-disk", optional = true, default-features = false }
+heim-host = { version = "0.0.5", path = "../heim-host", optional = true, default-features = false }
+heim-memory = {version = "0.0.5", path = "../heim-memory", optional = true, default-features = false }
+heim-net = {version = "0.0.5", path = "../heim-net", optional = true, default-features = false }
+heim-process = { version = "0.0.5", path = "../heim-process", optional = true, default-features = false }
+heim-virt = { version = "0.0.5", path = "../heim-virt", optional = true, default-features = false }
 
 [dev-dependencies]
 version-sync = "0.8"
@@ -52,4 +52,7 @@ reactor-polyfill = [
     "heim-net/reactor-polyfill",
     "heim-process/reactor-polyfill",
     "heim-virt/reactor-polyfill",
+]
+reactor-tokio = [
+    "heim-runtime/reactor-tokio",
 ]

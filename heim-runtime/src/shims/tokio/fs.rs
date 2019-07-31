@@ -1,9 +1,11 @@
-use std::fs;
 use std::marker::Unpin;
-use std::io::{self, BufRead as _};
 use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use std::ffi::OsString;
+
+use tokio::fs;
+use tokio_fs::DirEntry as TokioDirEntry;
+
 #[cfg(target_os = "windows")]
 use std::os::windows::io::{RawHandle, AsRawHandle};
 
@@ -14,9 +16,9 @@ pub struct File(fs::File);
 
 impl File {
     pub fn open<T>(path: T) -> impl Future<Output = Result<File>> where T: AsRef<Path> + Send + Unpin + 'static{
-        future::ready(fs::File::open(path))
-            .map_ok(File)
+        fs::File::open(path)
             .map_err(Error::from)
+            .map_ok(File)
     }
 
     #[cfg(target_os = "windows")]
@@ -26,7 +28,7 @@ impl File {
 }
 
 #[derive(Debug)]
-pub struct DirEntry(fs::DirEntry);
+pub struct DirEntry(TokioDirEntry);
 
 impl DirEntry {
     pub fn path(&self) -> PathBuf {
@@ -39,11 +41,21 @@ impl DirEntry {
 }
 
 pub fn path_exists<T>(path: T) -> impl Future<Output = bool> where T: AsRef<Path> + Send + Unpin + 'static{
-    future::ready(path.as_ref().exists())
+    fs::metadata(path)
+        .map(|res| {
+            match res {
+                Ok(..) => true,
+                Err(..) => false,
+            }
+        })
 }
 
 pub fn read_to_string<T>(path: T) -> impl Future<Output = Result<String>> where T: AsRef<Path> + Send + Unpin + 'static{
-    future::ready(fs::read_to_string(path)).map_err(From::from)
+    fs::read(path)
+        .map_err(Error::from)
+        .and_then(|bytes| {
+            future::ready(String::from_utf8(bytes).map_err(Error::from))
+        })
 }
 
 pub fn read_into<T, R, E>(path: T) -> impl Future<Output = Result<R>>
@@ -59,13 +71,18 @@ where
 }
 
 pub fn read_lines<T>(path: T) -> impl TryStream<Ok = String, Error = Error> where T: AsRef<Path> + Send + Unpin + 'static{
-    future::ready(fs::File::open(path))
-        .map_err(Error::from)
-        .map_ok(|file| {
-            let reader = io::BufReader::new(file);
-            stream::iter(reader.lines()).map_err(Error::from)
+    read_to_string(path)
+        // TODO: Dumb ass implementation, because tokio' `AsyncBufReadExt` is not implemented for File yet
+        // https://github.com/tokio-rs/tokio/issues/1256
+        .map_ok(|contents| {
+            let iter = contents.lines()
+                .map(|s| Ok(s.to_string()))
+                .collect::<Vec<_>>();
+
+            stream::iter(iter)
         })
         .try_flatten_stream()
+        .map_err(Error::from)
 }
 
 pub fn read_lines_into<T, R, E>(path: T) -> impl TryStream<Ok = R, Error = Error>
@@ -94,9 +111,8 @@ pub fn read_first_line<T>(path: T) -> impl TryFuture<Ok = String, Error = Error>
 }
 
 pub fn read_dir<T>(path: T) -> impl TryStream<Ok = DirEntry, Error = Error> where T: AsRef<Path> + Send + Unpin + 'static {
-    future::ready(fs::read_dir(path))
-        .map_err(Error::from)
-        .map_ok(|iter| stream::iter(iter).map_err(Error::from))
+    fs::read_dir(path)
         .try_flatten_stream()
+        .map_err(Error::from)
         .map_ok(DirEntry)
 }

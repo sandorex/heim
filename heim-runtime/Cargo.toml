@@ -13,9 +13,14 @@ license = "Apache-2.0 OR MIT"
 heim-common = { version = "0.0.5", path = "../heim-common" }
 cfg-if = "0.1.9"
 
+tokio = { git = "https://github.com/tokio-rs/tokio.git", branch = "master", optional = true }
+# TODO: `tokio_fs::DirEntry` is not re-exported by a `tokio` crate
+tokio-fs = { git = "https://github.com/tokio-rs/tokio.git", branch = "master", optional = true }
+
 [dev-dependencies]
 version-sync = "0.8"
 
 [features]
-default = ["reactor-polyfill"]
+default = []
 reactor-polyfill = []
+reactor-tokio = ["tokio", "tokio-fs"]

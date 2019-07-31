@@ -34,4 +34,6 @@ nix = "0.14.0"
 hex = "0.3.2"
 
 [features]
+default = ["reactor-polyfill"]
 reactor-polyfill = ["heim-runtime/reactor-polyfill"]
+reactor-tokio = ["heim-runtime/reactor-tokio"]

@@ -34,4 +34,6 @@ runtime = "0.3.0-alpha.6"
 version-sync = "0.8"
 
 [features]
+default = ["reactor-polyfill"]
 reactor-polyfill = ["heim-runtime/reactor-polyfill"]
+reactor-tokio = ["heim-runtime/reactor-tokio"]
