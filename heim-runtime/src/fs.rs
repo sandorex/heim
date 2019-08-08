@@ -107,3 +107,11 @@ where
 {
     shims::fs::read_dir(path).map_ok(DirEntry)
 }
+
+/// Returns future which tries read the symlink.
+pub fn read_link<T>(path: T) -> impl TryFuture<Ok = PathBuf, Error = Error>
+where
+    T: AsRef<Path> + Send + Unpin + 'static,
+{
+    shims::fs::read_link(path)
+}

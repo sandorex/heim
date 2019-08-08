@@ -1,13 +1,18 @@
 # heim
 
+![Project banner](./.github/banner.png)
+
 [![Latest Version](https://img.shields.io/crates/v/heim.svg)](https://crates.io/crates/heim)
 [![Latest Version](https://docs.rs/heim/badge.svg)](https://docs.rs/heim)
-[![dependency status](https://deps.rs/crate/heim/0.0.5/status.svg)](https://deps.rs/crate/heim/0.0.5)
+[![dependency status](https://deps.rs/crate/heim/0.0.6/status.svg)](https://deps.rs/crate/heim/0.0.6)
 [![Build Status](https://dev.azure.com/heim-rs/heim/_apis/build/status/heim-rs.heim?branchName=master)](https://dev.azure.com/heim-rs/heim/_build/latest?definitionId=1&branchName=master)
-[![codecov](https://codecov.io/gh/heim-rs/heim/branch/master/graph/badge.svg)](https://codecov.io/gh/heim-rs/heim)
+[![Coverage Status](https://coveralls.io/repos/github/heim-rs/heim/badge.svg?branch=master)](https://coveralls.io/github/heim-rs/heim?branch=master)
 ![Minimum rustc version](https://img.shields.io/badge/rustc-1.36+-green.svg)
 ![Apache 2.0 OR MIT licensed](https://img.shields.io/badge/license-Apache2.0%2FMIT-blue.svg)
 [![Gitter](https://badges.gitter.im/heim-rs/heim.svg)](https://gitter.im/heim-rs/heim)
+![Platforms supported](https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-brightgreen)
+[![Backers on Open Collective](https://opencollective.com/heim-rs/backers/badge.svg)](#backers)
+[![Sponsors on Open Collective](https://opencollective.com/heim-rs/sponsors/badge.svg)](#sponsors)
 
 > Cross-platform library for system information fetching
 
@@ -17,6 +22,9 @@ It targets to have at least the same functionality as
 [psutil](https://github.com/giampaolo/psutil),
 [gopsutil](https://github.com/shirou/gopsutil) or
 [oshi](https://github.com/oshi/oshi) eventually.
+
+Why should I use `heim` instead of *{crate-name}*?
+See the [comparison](https://github.com/heim-rs/heim/blob/master/COMPARISON.md) page.
 
 ## Background
 
@@ -70,11 +78,6 @@ Please be aware that at the moment, `heim` (and all sub-crates)
 has the "**experimental**" status,
 so consider double checking the results before pushing your code to production.
 
-## Donations
-
-If you appreciate my work and want to support me or speed up the project development,
-you can do it [here](https://svartalf.info/donate/).
-
 ## License
 
 Licensed under either of [Apache License 2.0](https://github.com/heim-rs/heim/blob/master/LICENSE-APACHE)
@@ -82,3 +85,24 @@ or [MIT license](https://github.com/heim-rs/heim/blob/master/LICENSE-MIT) at you
 
 Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in this crate by you,
 as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
+
+## Donations
+
+If you appreciate my work and want to support me or speed up the project development,
+you can do it [here](https://svartalf.info/donate/) or
+support this project at [Open Collective](https://opencollective.com/heim-rs).
+
+## Contributors
+
+This project exists thanks to all the people who contribute.
+[![Contributors](https://opencollective.com/heim-rs/contributors.svg?width=890&button=false)](https://github.com/heim-rs/heim/graphs/contributors)
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/heim-rs#backer)]
+
+[![Backers](https://opencollective.com/heim-rs/backers.svg?width=890)](https://opencollective.com/heim-rs#backers)
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/heim-rs#sponsor)]

@@ -4,11 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.0.6] - 2019-08-08
 
 ### Added
 
 - `heim-runtime` crate with shims for async runtimes (only "sync" polyfill available at the moment)
+- `process::processes` function returning stream of `process::Process`
+- `process::Process` struct with `pid`, `parent_pid`, `name` and `exe` methods
+
+### Fixed
+
+- `disk::partitions` returned inconsistent data for Windows ([#92](https://github.com/heim-rs/heim/issues/92))
+- `disk::io_counters` failed on any empty removable drive in Windows ([#94](https://github.com/heim-rs/heim/issues/94))
 
 ### Changed
 

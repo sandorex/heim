@@ -12,6 +12,21 @@ async fn smoke_partitions() {
         let _ = part.device();
         let _ = part.mount_point();
         let _ = part.file_system();
+
+        #[cfg(target_os = "macos")]
+        {
+            use heim_disk::os::macos::PartitionExt;
+
+            let _ = part.flags();
+        }
+
+        #[cfg(target_os = "windows")]
+        {
+            use heim_disk::os::windows::PartitionExt;
+
+            let _ = part.flags();
+            let _ = part.drive_type();
+        }
     }
 }
 
@@ -24,6 +39,21 @@ async fn smoke_partitions_physical() {
         let _ = part.device();
         let _ = part.mount_point();
         let _ = part.file_system();
+
+        #[cfg(target_os = "macos")]
+        {
+            use heim_disk::os::macos::PartitionExt;
+
+            let _ = part.flags();
+        }
+
+        #[cfg(target_os = "windows")]
+        {
+            use heim_disk::os::windows::PartitionExt;
+
+            let _ = part.flags();
+            let _ = part.drive_type();
+        }
     }
 }
 
@@ -37,11 +67,24 @@ async fn smoke_usage() {
     let _ = usage.used();
     let _ = usage.free();
     let _ = usage.ratio();
+
+    #[cfg(unix)]
+    {
+        use heim_disk::os::unix::UsageExt;
+
+        let _ = usage.flags();
+    }
 }
 
-#[heim_derive::skip_ci(target_os = "windows")]
 #[runtime::test]
 async fn smoke_io_counters() {
+    #[cfg(target_os = "windows")]
+    {
+        use std::process::Command;
+
+        let _ = Command::new("diskperf").arg("-y").status();
+    }
+
     let mut counters = disk::io_counters();
     while let Some(count) = counters.next().await {
         let count = count.unwrap();
@@ -56,6 +99,13 @@ async fn smoke_io_counters() {
 
 #[runtime::test]
 async fn smoke_io_counters_physical() {
+    #[cfg(target_os = "windows")]
+    {
+        use std::process::Command;
+
+        let _ = Command::new("diskperf").arg("-y").status();
+    }
+
     let mut counters = disk::io_counters_physical();
     while let Some(count) = counters.next().await {
         let count = count.unwrap();

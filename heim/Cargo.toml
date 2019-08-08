@@ -1,6 +1,6 @@
 [package]
 name = "heim"
-version = "0.0.5"
+version = "0.0.6"
 authors = ["svartalf <self@svartalf.info>"]
 edition = "2018"
 description = "Cross-platform framework for system information"
@@ -12,25 +12,25 @@ license = "Apache-2.0 OR MIT"
 
 [badges]
 maintenance = { status = "experimental" }
-azure-devops = { project = "heim-rs", pipeline = "heim" }
+azure-devops = { project = "heim-rs/heim", pipeline = "heim-rs.heim" }
 
 [dependencies]
-heim-common = { version = "0.0.5", path = "../heim-common" }
-heim-derive = { version = "0.0.5", path = "../heim-derive" }
+heim-common = { version = "0.0.6", path = "../heim-common" }
+heim-derive = { version = "0.0.6", path = "../heim-derive" }
 heim-runtime = { version = "0.0.2", path = "../heim-runtime" }
-heim-cpu = {version = "0.0.5", path = "../heim-cpu", optional = true, default-features = false }
-heim-disk = {version = "0.0.5", path = "../heim-disk", optional = true, default-features = false }
-heim-host = { version = "0.0.5", path = "../heim-host", optional = true, default-features = false }
-heim-memory = {version = "0.0.5", path = "../heim-memory", optional = true, default-features = false }
-heim-net = {version = "0.0.5", path = "../heim-net", optional = true, default-features = false }
-heim-process = { version = "0.0.5", path = "../heim-process", optional = true, default-features = false }
-heim-virt = { version = "0.0.5", path = "../heim-virt", optional = true, default-features = false }
+heim-cpu = {version = "0.0.6", path = "../heim-cpu", optional = true }
+heim-disk = {version = "0.0.6", path = "../heim-disk", optional = true }
+heim-host = { version = "0.0.6", path = "../heim-host", optional = true }
+heim-memory = {version = "0.0.6", path = "../heim-memory", optional = true }
+heim-net = {version = "0.0.6", path = "../heim-net", optional = true }
+heim-process = { version = "0.0.6", path = "../heim-process", optional = true }
+heim-virt = { version = "0.0.6", path = "../heim-virt", optional = true }
 
 [dev-dependencies]
 version-sync = "0.8"
 
 [features]
-default = ["host", "cpu", "memory", "disk", "net", "process", "virt", "reactor-polyfill"]
+default = ["host", "cpu", "memory", "disk", "net", "process", "virt", "runtime-polyfill"]
 
 # Modules
 host = ["heim-host"]
@@ -42,17 +42,17 @@ process = ["heim-process"]
 virt = ["heim-virt"]
 
 # Reactors
-reactor-polyfill = [
-    "heim-runtime/reactor-polyfill",
-    "heim-cpu/reactor-polyfill",
-    "heim-cpu/reactor-polyfill",
-    "heim-disk/reactor-polyfill",
-    "heim-host/reactor-polyfill",
-    "heim-memory/reactor-polyfill",
-    "heim-net/reactor-polyfill",
-    "heim-process/reactor-polyfill",
-    "heim-virt/reactor-polyfill",
+runtime-polyfill = [
+    "heim-runtime/runtime-polyfill",
+    "heim-cpu/runtime-polyfill",
+    "heim-cpu/runtime-polyfill",
+    "heim-disk/runtime-polyfill",
+    "heim-host/runtime-polyfill",
+    "heim-memory/runtime-polyfill",
+    "heim-net/runtime-polyfill",
+    "heim-process/runtime-polyfill",
+    "heim-virt/runtime-polyfill",
 ]
-reactor-tokio = [
-    "heim-runtime/reactor-tokio",
+runtime-tokio = [
+    "heim-runtime/runtime-tokio",
 ]

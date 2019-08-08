@@ -2,7 +2,7 @@
 //!
 //! This module is enabled with the `process` feature flag (enabled by default).
 
-#![doc(html_root_url = "https://docs.rs/heim-process/0.0.5")]
+#![doc(html_root_url = "https://docs.rs/heim-process/0.0.6")]
 #![deny(
     unused,
     unused_imports,
@@ -27,8 +27,11 @@ mod errors;
 mod sys;
 
 mod pids;
+mod process;
 
 pub use self::pids::*;
+pub use self::process::*;
 
-pub use self::errors::ProcessError;
+pub use self::errors::{ProcessError, ProcessResult};
+pub use heim_common::units::Time;
 pub use heim_common::Pid;
