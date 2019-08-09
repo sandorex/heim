@@ -14,15 +14,15 @@ const HYPERVISOR_COMPAT_PATH: &str = "/proc/device-tree/hypervisor/compatible";
 
 #[allow(unused)]
 fn hypervisor<T>(path: T) -> impl Future<Output = Result<Virtualization, ()>>
-where T: AsRef<Path> + Send + Unpin + 'static{
-    fs::read_lines(path)
-        .into_stream() // TODO: Looks dumb
-        .into_future()
-        .map(|(try_line, _)| match try_line {
-            Some(Ok(ref line)) if line == "linux,kvm" => Ok(Virtualization::Kvm),
-            Some(Ok(ref line)) if line.contains("xen") => Ok(Virtualization::Xen),
-            Some(Ok(..)) => Ok(Virtualization::Unknown),
-            _ => Err(()),
+where T: AsRef<Path> + Send + Unpin + 'static {
+    fs::read_first_line(path)
+        .then(|try_line| {
+            match try_line {
+                Ok(ref line) if line == "linux,kvm" => future::ok(Virtualization::Kvm),
+                Ok(ref line) if line.contains("xen") => future::ok(Virtualization::Xen),
+                Ok(..) => future::ok(Virtualization::Unknown),
+                _ => future::err(()),
+            }
         })
 }
 
@@ -38,6 +38,7 @@ where T: AsRef<Path> + Send + Unpin + 'static {
             future::ready(matched)
         })
         .into_stream()
+        .boxed()
         .into_future()
         .map(|(res, _)| match res {
             Some(..) => Ok(Virtualization::Qemu),

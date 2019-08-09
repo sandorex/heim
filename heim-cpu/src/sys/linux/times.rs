@@ -59,6 +59,7 @@ pub fn time() -> impl Future<Output = Result<CpuTime>> {
     fs::read_lines_into::<_, CpuTime, _>("/proc/stat")
         .into_stream()
         .take(1)
+        .boxed()
         .into_future()
         .then(|res| match res {
             (Some(Ok(time)), _) => future::ok(time),

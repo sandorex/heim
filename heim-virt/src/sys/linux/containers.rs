@@ -63,6 +63,7 @@ where
                 _ => future::err(()),
             }
         })
+        .boxed()
         .into_future()
         .map(|(value, _)| match value {
             Some(Ok(virt)) => Ok(virt),
