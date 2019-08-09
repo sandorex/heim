@@ -20,6 +20,6 @@ jobs:
             displayName: Build sources (runtime tokio)
 
           - script: |
-                cargo +${{ parameters.toolchain }} test --all --all-features --no-fail-fast -- --nocapture
+                cargo +${{ parameters.toolchain }} test --all --no-fail-fast -- --nocapture
             condition: eq('${{ parameters.toolchain }}', 'nightly')
             displayName: Run tests (nightly only)
