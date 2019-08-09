@@ -21,6 +21,7 @@ stages:
 
                 - script: |
                       rustup component add clippy --toolchain nightly
-                      cargo +nightly clippy --all-targets --all-features -- -D warnings
+                      cargo +nightly clippy --all-targets --no-default-features--features runtime-polyfill -- -D warnings
+                      cargo +nightly clippy --all-targets --no-default-features--features runtime-tokio -- -D warnings
                   displayName: Run clippy
                   continueOnError: true
