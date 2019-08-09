@@ -75,7 +75,7 @@ where
 }
 
 /// Returns stream of lines yielded from file with `path` path.
-pub fn read_lines<T>(path: T) -> impl TryStream<Ok = String, Error = Error>
+pub fn read_lines<T>(path: T) -> impl Stream<Item = Result<String>>
 where
     T: AsRef<Path> + Send + Unpin + 'static,
 {
@@ -83,7 +83,7 @@ where
 }
 
 /// Returns stream which reads lines from file and tries to parse them with help of `FromStr` trait.
-pub fn read_lines_into<T, R, E>(path: T) -> impl TryStream<Ok = R, Error = Error>
+pub fn read_lines_into<T, R, E>(path: T) -> impl Stream<Item = Result<R>>
 where
     T: AsRef<Path> + Send + Unpin + 'static,
     R: FromStr<Err = E>,
@@ -93,7 +93,7 @@ where
 }
 
 /// Returns future which tries to read the first line from file.
-pub fn read_first_line<T>(path: T) -> impl TryFuture<Ok = String, Error = Error>
+pub fn read_first_line<T>(path: T) -> impl Future<Output = Result<String>>
 where
     T: AsRef<Path> + Send + Unpin + 'static,
 {
@@ -101,7 +101,7 @@ where
 }
 
 /// Returns stream of files and directories contained in the `path` directory.
-pub fn read_dir<T>(path: T) -> impl TryStream<Ok = DirEntry, Error = Error>
+pub fn read_dir<T>(path: T) -> impl Stream<Item = Result<DirEntry>>
 where
     T: AsRef<Path> + Send + Unpin + 'static,
 {
@@ -109,7 +109,7 @@ where
 }
 
 /// Returns future which tries read the symlink.
-pub fn read_link<T>(path: T) -> impl TryFuture<Ok = PathBuf, Error = Error>
+pub fn read_link<T>(path: T) -> impl Future<Output = Result<PathBuf>>
 where
     T: AsRef<Path> + Send + Unpin + 'static,
 {

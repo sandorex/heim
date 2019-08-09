@@ -12,8 +12,12 @@ jobs:
                 toolchain: ${{ parameters.toolchain }}
 
           - script: |
-                cargo +${{ parameters.toolchain }} build --all --all-features
-            displayName: Build sources
+                cargo +${{ parameters.toolchain }} build --all --no-default-features --features host,cpu,memory,disk,net,process,virt,runtime-polyfill
+            displayName: Build sources (runtime polyfill)
+
+          - script: |
+                cargo +${{ parameters.toolchain }} build --all --no-default-features --features host,cpu,memory,disk,net,process,virt,runtime-tokio
+            displayName: Build sources (runtime tokio)
 
           - script: |
                 cargo +${{ parameters.toolchain }} test --all --all-features --no-fail-fast -- --nocapture

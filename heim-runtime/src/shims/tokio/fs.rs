@@ -70,7 +70,7 @@ where
         })
 }
 
-pub fn read_lines<T>(path: T) -> impl TryStream<Ok = String, Error = Error> where T: AsRef<Path> + Send + Unpin + 'static{
+pub fn read_lines<T>(path: T) -> impl Stream<Item = Result<String>> where T: AsRef<Path> + Send + Unpin + 'static{
     read_to_string(path)
         // TODO: Dumb ass implementation, because tokio' `AsyncBufReadExt` is not implemented for File yet
         // https://github.com/tokio-rs/tokio/issues/1256
@@ -83,25 +83,25 @@ pub fn read_lines<T>(path: T) -> impl TryStream<Ok = String, Error = Error> wher
         })
         .try_flatten_stream()
         .map_err(Error::from)
+        .into_stream()
 }
 
-pub fn read_lines_into<T, R, E>(path: T) -> impl TryStream<Ok = R, Error = Error>
+pub fn read_lines_into<T, R, E>(path: T) -> impl Stream<Item = Result<R>>
 where
     T: AsRef<Path> + Send + Unpin + 'static,
     R: FromStr<Err = E>,
     Error: From<E>,
 {
-    read_lines(path).into_stream().then(|result| {
+    read_lines(path).then(|result| {
         let res = result.and_then(|line| R::from_str(&line).map_err(Error::from));
 
         future::ready(res)
     })
 }
 
-pub fn read_first_line<T>(path: T) -> impl TryFuture<Ok = String, Error = Error> where T: AsRef<Path> + Send + Unpin + 'static{
-    // TODO: Looks dumb
+pub fn read_first_line<T>(path: T) -> impl Future<Output = Result<String>> where T: AsRef<Path> + Send + Unpin + 'static {
     read_lines(path)
-        .into_stream()
+        .boxed()
         .into_future()
         .map(|(try_line, _)| match try_line {
             Some(Ok(line)) => Ok(line),
@@ -110,9 +110,16 @@ pub fn read_first_line<T>(path: T) -> impl TryFuture<Ok = String, Error = Error>
         })
 }
 
-pub fn read_dir<T>(path: T) -> impl TryStream<Ok = DirEntry, Error = Error> where T: AsRef<Path> + Send + Unpin + 'static {
+pub fn read_dir<T>(path: T) -> impl Stream<Item = Result<DirEntry>> where T: AsRef<Path> + Send + Unpin + 'static {
     fs::read_dir(path)
         .try_flatten_stream()
         .map_err(Error::from)
         .map_ok(DirEntry)
+}
+
+pub fn read_link<T>(path: T) -> impl Future<Output = Result<PathBuf>>
+where
+    T: AsRef<Path> + Send + Unpin + 'static,
+{
+    fs::read_link(path).map_err(Error::from).into_future()
 }

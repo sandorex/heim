@@ -50,31 +50,24 @@
     unused_results
 )]
 
-#[cfg(feature = "cpu")]
 #[doc(inline)]
 pub use heim_cpu as cpu;
 
-#[cfg(feature = "disk")]
 #[doc(inline)]
 pub use heim_disk as disk;
 
-#[cfg(feature = "host")]
 #[doc(inline)]
 pub use heim_host as host;
 
-#[cfg(feature = "memory")]
 #[doc(inline)]
 pub use heim_memory as memory;
 
-#[cfg(feature = "net")]
 #[doc(inline)]
 pub use heim_net as net;
 
-#[cfg(feature = "process")]
 #[doc(inline)]
 pub use heim_process as process;
 
-#[cfg(feature = "virt")]
 #[doc(inline)]
 pub use heim_virt as virt;
 

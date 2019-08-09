@@ -70,7 +70,7 @@ where
         .and_then(|content| future::ready(R::from_str(&content).map_err(Error::from)))
 }
 
-pub fn read_lines<T>(path: T) -> impl TryStream<Ok = String, Error = Error>
+pub fn read_lines<T>(path: T) -> impl Stream<Item = Result<String>>
 where
     T: AsRef<Path> + Send + Unpin + 'static,
 {
@@ -82,7 +82,7 @@ where
         .try_flatten_stream()
 }
 
-pub fn read_lines_into<T, R, E>(path: T) -> impl TryStream<Ok = R, Error = Error>
+pub fn read_lines_into<T, R, E>(path: T) -> impl Stream<Item = Result<R>>
 where
     T: AsRef<Path> + Send + Unpin + 'static,
     R: FromStr<Err = E>,
@@ -95,7 +95,7 @@ where
     })
 }
 
-pub fn read_first_line<T>(path: T) -> impl TryFuture<Ok = String, Error = Error>
+pub fn read_first_line<T>(path: T) -> impl Future<Output = Result<String>>
 where
     T: AsRef<Path> + Send + Unpin + 'static,
 {
@@ -110,7 +110,7 @@ where
         })
 }
 
-pub fn read_dir<T>(path: T) -> impl TryStream<Ok = DirEntry, Error = Error>
+pub fn read_dir<T>(path: T) -> impl Stream<Item = Result<DirEntry>>
 where
     T: AsRef<Path> + Send + Unpin + 'static,
 {
@@ -122,7 +122,7 @@ where
         .map_ok(DirEntry)
 }
 
-pub fn read_link<T>(path: T) -> impl TryFuture<Ok = PathBuf, Error = Error>
+pub fn read_link<T>(path: T) -> impl Future<Output = Result<PathBuf>>
 where
     T: AsRef<Path> + Send + Unpin + 'static,
 {

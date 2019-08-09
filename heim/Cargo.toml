@@ -17,34 +17,24 @@ azure-devops = { project = "heim-rs/heim", pipeline = "heim-rs.heim" }
 [dependencies]
 heim-common = { version = "0.0.6", path = "../heim-common" }
 heim-derive = { version = "0.0.6", path = "../heim-derive" }
-heim-runtime = { version = "0.0.2", path = "../heim-runtime" }
-heim-cpu = {version = "0.0.6", path = "../heim-cpu", optional = true }
-heim-disk = {version = "0.0.6", path = "../heim-disk", optional = true }
-heim-host = { version = "0.0.6", path = "../heim-host", optional = true }
-heim-memory = {version = "0.0.6", path = "../heim-memory", optional = true }
-heim-net = {version = "0.0.6", path = "../heim-net", optional = true }
-heim-process = { version = "0.0.6", path = "../heim-process", optional = true }
-heim-virt = { version = "0.0.6", path = "../heim-virt", optional = true }
+heim-runtime = { version = "0.0.2", path = "../heim-runtime", default-features = false }
+heim-cpu = {version = "0.0.6", path = "../heim-cpu", default-features = false }
+heim-disk = {version = "0.0.6", path = "../heim-disk", default-features = false }
+heim-host = { version = "0.0.6", path = "../heim-host", default-features = false }
+heim-memory = {version = "0.0.6", path = "../heim-memory", default-features = false }
+heim-net = {version = "0.0.6", path = "../heim-net", default-features = false }
+heim-process = { version = "0.0.6", path = "../heim-process", default-features = false }
+heim-virt = { version = "0.0.6", path = "../heim-virt", default-features = false }
 
 [dev-dependencies]
 version-sync = "0.8"
 
 [features]
-default = ["host", "cpu", "memory", "disk", "net", "process", "virt", "runtime-polyfill"]
-
-# Modules
-host = ["heim-host"]
-cpu = ["heim-cpu"]
-memory = ["heim-memory"]
-disk = ["heim-disk"]
-net = ["heim-net"]
-process = ["heim-process"]
-virt = ["heim-virt"]
+default = ["runtime-polyfill"]
 
 # Reactors
 runtime-polyfill = [
     "heim-runtime/runtime-polyfill",
-    "heim-cpu/runtime-polyfill",
     "heim-cpu/runtime-polyfill",
     "heim-disk/runtime-polyfill",
     "heim-host/runtime-polyfill",
@@ -55,4 +45,11 @@ runtime-polyfill = [
 ]
 runtime-tokio = [
     "heim-runtime/runtime-tokio",
+    "heim-cpu/runtime-tokio",
+    "heim-disk/runtime-tokio",
+    "heim-host/runtime-tokio",
+    "heim-memory/runtime-tokio",
+    "heim-net/runtime-tokio",
+    "heim-process/runtime-tokio",
+    "heim-virt/runtime-tokio",
 ]
