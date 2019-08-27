@@ -18,7 +18,7 @@ azure-devops = { project = "heim-rs/heim", pipeline = "heim-rs.heim" }
 heim-derive = { version = "0.0.6", path = "../heim-derive" }
 cfg-if = "0.1.7"
 futures-preview = "0.3.0-alpha.18"
-pin-utils = "0.1.0-alpha.4"
+pin-utils = "0.1.0-alpha.4"  # TODO: Remove as `futures-preview` has the `pin_mut!` too
 
 [dev-dependencies]
 version-sync = "0.8"

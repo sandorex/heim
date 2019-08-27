@@ -17,7 +17,7 @@ azure-devops = { project = "heim-rs/heim", pipeline = "heim-rs.heim" }
 [dependencies]
 heim-derive = { version = "0.0.6", path = "../heim-derive" }
 heim-common = { version = "0.0.6", path = "../heim-common" }
-heim-runtime = { version = "0.0.2", path = "../heim-runtime" }
+heim-runtime = { version = "0.0.2", path = "../heim-runtime", default-features = false }
 lazy_static = "1.3.0"
 cfg-if = "0.1.7"
 
@@ -44,4 +44,6 @@ futures-preview = "0.3.0-alpha.18"
 version-sync = "0.8"
 
 [features]
+default = ["runtime-polyfill"]
 runtime-polyfill = ["heim-runtime/runtime-polyfill"]
+runtime-async-std = ["heim-runtime/runtime-async-std"]

@@ -1,13 +1,13 @@
 use std::fs;
+pub use std::fs::DirEntry;
 use std::io::{self, BufRead};
 use std::path::{Path, PathBuf};
-use std::str::FromStr;
 
 #[cfg(target_os = "windows")]
 use std::os::windows::io::{AsRawHandle, RawHandle};
 
 use heim_common::prelude::{
-    future, stream, Future, FutureExt, Stream, StreamExt, TryFutureExt, TryStreamExt,
+    stream, Future, FutureExt, Stream, StreamExt, TryFutureExt, TryStreamExt,
 };
 
 use super::pool::THREAD_POOL;
@@ -92,28 +92,4 @@ where
         .spawn(move || fs::read_dir(path))
         .map_ok(stream::iter)
         .try_flatten_stream()
-}
-
-pub fn read_into<T, R, E>(path: T) -> impl Future<Output = Result<R, E>>
-where
-    T: AsRef<Path> + Send + Unpin + 'static,
-    R: FromStr<Err = E>,
-    E: From<io::Error>,
-{
-    read_to_string(path)
-        .map_err(E::from)
-        .and_then(|content| future::ready(R::from_str(&content).map_err(Into::into)))
-}
-
-pub fn read_lines_into<T, R, E>(path: T) -> impl Stream<Item = Result<R, E>>
-where
-    T: AsRef<Path> + Send + Unpin + 'static,
-    R: FromStr<Err = E>,
-    E: From<io::Error>,
-{
-    read_lines(path).map_err(E::from).then(|result| {
-        let res = result.and_then(|line| R::from_str(&line));
-
-        future::ready(res)
-    })
 }

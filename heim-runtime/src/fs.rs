@@ -1,15 +1,14 @@
 //! Async FS operations.
 
-use std::fs;
 use std::io;
 use std::marker::Unpin;
 use std::path::{Path, PathBuf};
+use std::ffi::OsString;
 use std::str::FromStr;
-
 #[cfg(target_os = "windows")]
 use std::os::windows::io::RawHandle;
 
-use heim_common::prelude::{Future, Stream, TryFutureExt};
+use heim_common::prelude::{future, Future, TryFutureExt, Stream, StreamExt, TryStreamExt};
 
 use crate::shims;
 
@@ -30,6 +29,22 @@ impl File {
     #[cfg(target_os = "windows")]
     pub fn as_raw_handle(&self) -> RawHandle {
         self.0.as_raw_handle()
+    }
+}
+
+/// File entry representation.
+#[derive(Debug)]
+pub struct DirEntry(shims::fs::DirEntry);
+
+impl DirEntry {
+    /// FOO
+    pub fn file_name(&self) -> OsString {
+        self.0.file_name()
+    }
+
+    /// BAR
+    pub fn path(&self) -> PathBuf {
+        self.0.path()
     }
 }
 
@@ -74,11 +89,11 @@ where
 }
 
 /// Returns stream of files and directories contained in the `path` directory.
-pub fn read_dir<T>(path: T) -> impl Stream<Item = io::Result<fs::DirEntry>>
+pub fn read_dir<T>(path: T) -> impl Stream<Item = io::Result<DirEntry>>
 where
     T: AsRef<Path> + Send + Unpin + 'static,
 {
-    shims::fs::read_dir(path)
+    shims::fs::read_dir(path).map_ok(DirEntry)
 }
 
 /// Read `path` file and try to parse it into a `R` type via `std::str::FromStr`.
@@ -88,7 +103,9 @@ where
     R: FromStr<Err = E>,
     E: From<io::Error>,
 {
-    shims::fs::read_into(path)
+    read_to_string(path)
+        .map_err(E::from)
+        .and_then(|content| future::ready(R::from_str(&content).map_err(Into::into)))
 }
 
 /// Returns stream which reads lines from file and tries to parse them with help of `FromStr` trait.
@@ -98,5 +115,9 @@ where
     R: FromStr<Err = E>,
     E: From<io::Error>,
 {
-    shims::fs::read_lines_into(path)
+    read_lines(path).map_err(E::from).then(|result| {
+        let res = result.and_then(|line| R::from_str(&line));
+
+        future::ready(res)
+    })
 }

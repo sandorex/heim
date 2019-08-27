@@ -17,15 +17,15 @@ azure-devops = { project = "heim-rs/heim", pipeline = "heim-rs.heim" }
 [dependencies]
 heim-common = { version = "0.0.6", path = "../heim-common" }
 heim-derive = { version = "0.0.6", path = "../heim-derive" }
-heim-runtime = { version = "0.0.2", path = "../heim-runtime" }
-heim-cpu = {version = "0.0.6", path = "../heim-cpu", optional = true }
-heim-disk = {version = "0.0.6", path = "../heim-disk", optional = true }
-heim-host = { version = "0.0.6", path = "../heim-host", optional = true }
-heim-memory = {version = "0.0.6", path = "../heim-memory", optional = true }
-heim-net = {version = "0.0.6", path = "../heim-net", optional = true }
-heim-process = { version = "0.0.6", path = "../heim-process", optional = true }
-heim-virt = { version = "0.0.6", path = "../heim-virt", optional = true }
-heim-sensors = { version = "0.0.1", path = "../heim-sensors", optional = true }
+heim-runtime = { version = "0.0.2", path = "../heim-runtime", default-features = false }
+heim-cpu = {version = "0.0.6", path = "../heim-cpu", optional = true, default-features = false }
+heim-disk = {version = "0.0.6", path = "../heim-disk", optional = true, default-features = false }
+heim-host = { version = "0.0.6", path = "../heim-host", optional = true, default-features = false }
+heim-memory = {version = "0.0.6", path = "../heim-memory", optional = true, default-features = false }
+heim-net = {version = "0.0.6", path = "../heim-net", optional = true, default-features = false }
+heim-process = { version = "0.0.6", path = "../heim-process", optional = true, default-features = false }
+heim-virt = { version = "0.0.6", path = "../heim-virt", optional = true, default-features = false }
+heim-sensors = { version = "0.0.1", path = "../heim-sensors", optional = true, default-features = false }
 
 [dev-dependencies]
 version-sync = "0.8"
@@ -55,4 +55,14 @@ runtime-polyfill = [
     "heim-process/runtime-polyfill",
     "heim-virt/runtime-polyfill",
     "heim-sensors/runtime-polyfill",
+]
+runtime-async-std = [
+    "heim-runtime/runtime-async-std",
+    "heim-cpu/runtime-async-std",
+    "heim-disk/runtime-async-std",
+    "heim-host/runtime-async-std",
+    "heim-memory/runtime-async-std",
+    "heim-net/runtime-async-std",
+    "heim-process/runtime-async-std",
+    "heim-virt/runtime-async-std",
 ]
