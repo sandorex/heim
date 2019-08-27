@@ -20,7 +20,7 @@ jobs:
             displayName: Install grcov
 
           - script: |
-                cargo +${{ parameters.toolchain }} test --all --all-features
+                cargo +${{ parameters.toolchain }} test --all
             displayName: Run tests suite
             env:
                 CARGO_INCREMENTAL: 0

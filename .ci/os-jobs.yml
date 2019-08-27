@@ -12,10 +12,15 @@ jobs:
                 toolchain: ${{ parameters.toolchain }}
 
           - script: |
-                cargo +${{ parameters.toolchain }} build --all --all-features
+                cargo +${{ parameters.toolchain }} build --all
             displayName: Build sources
 
           - script: |
-                cargo +${{ parameters.toolchain }} test --all --all-features --no-fail-fast -- --nocapture
+                cargo +${{ parameters.toolchain }} check --all --no-default-features --features runtime-async-std
+            condition: eq('${{ parameters.toolchain }}', 'nightly')
+            displayName: Build with async-std toolchain
+
+          - script: |
+                cargo +${{ parameters.toolchain }} test --all --no-fail-fast -- --nocapture
             condition: eq('${{ parameters.toolchain }}', 'nightly')
             displayName: Run tests (nightly only)
