@@ -1,14 +1,14 @@
 //! Async FS operations.
 
+use std::ffi::OsString;
 use std::io;
 use std::marker::Unpin;
-use std::path::{Path, PathBuf};
-use std::ffi::OsString;
-use std::str::FromStr;
 #[cfg(target_os = "windows")]
 use std::os::windows::io::RawHandle;
+use std::path::{Path, PathBuf};
+use std::str::FromStr;
 
-use heim_common::prelude::{future, Future, TryFutureExt, Stream, StreamExt, TryStreamExt};
+use heim_common::prelude::{future, Future, Stream, StreamExt, TryFutureExt, TryStreamExt};
 
 use crate::shims;
 
